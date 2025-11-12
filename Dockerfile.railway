@@ -1,0 +1,18 @@
+# Dockerfile for Railway deployment
+# This includes the Piston API with pre-installed runtimes
+
+FROM ghcr.io/engineer-man/piston:latest
+
+# Copy pre-installed packages
+COPY piston-packages/ /piston/packages/
+
+# Fix Java permission issues (remove problematic files)
+RUN find /piston/packages/java -name "*.jsa" -delete 2>/dev/null || true && \
+    rm -rf /piston/packages/java/*/legal 2>/dev/null || true
+
+# Expose port
+EXPOSE 2000
+
+# Use the default entrypoint from the base image
+# The base image already has the correct CMD
+
